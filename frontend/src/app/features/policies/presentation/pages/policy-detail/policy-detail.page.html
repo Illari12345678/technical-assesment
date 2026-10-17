@@ -1,0 +1,44 @@
+<section class="page">
+  <a class="page__back" routerLink="/policies">← Volver a pólizas</a>
+
+  @if (store.selectedPolicy(); as policy) {
+    <article class="detail">
+      <header class="detail__header">
+        <div>
+          <h1>{{ policy.policyNumber }}</h1>
+          <p>{{ policy.type }} · {{ policy.holderName }}</p>
+        </div>
+        <span
+          class="detail__status"
+          [class.detail__status--active]="policy.isActive"
+          [class.detail__status--inactive]="!policy.isActive"
+        >
+          {{ policy.status.label }}
+        </span>
+      </header>
+
+      <dl class="detail__grid">
+        <div>
+          <dt>Titular</dt>
+          <dd>{{ policy.holderName }}</dd>
+        </div>
+        <div>
+          <dt>Tipo de cobertura</dt>
+          <dd>{{ policy.type }}</dd>
+        </div>
+        <div>
+          <dt>Prima anual</dt>
+          <dd>{{ policy.premium.format() }}</dd>
+        </div>
+        <div>
+          <dt>Fecha de inicio</dt>
+          <dd>{{ policy.formattedStartDate }}</dd>
+        </div>
+      </dl>
+    </article>
+  } @else if (store.error()) {
+    <p class="page__feedback page__feedback--error">{{ store.error() }}</p>
+  } @else {
+    <p class="page__feedback">Cargando póliza…</p>
+  }
+</section>

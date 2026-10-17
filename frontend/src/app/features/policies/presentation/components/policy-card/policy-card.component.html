@@ -1,0 +1,20 @@
+<article class="card" [class.card--inactive]="!policy.isActive" (click)="select.emit(policy)">
+  <header class="card__header">
+    <span class="card__type">{{ policy.type }}</span>
+    <span
+      class="card__status"
+      [class.card__status--active]="policy.isActive"
+      [class.card__status--inactive]="!policy.isActive"
+    >
+      {{ policy.status.label }}
+    </span>
+  </header>
+
+  <h3 class="card__number">{{ policy.policyNumber }}</h3>
+  <p class="card__holder">{{ policy.holderName }}</p>
+
+  <footer class="card__footer">
+    <span class="card__premium">{{ policy.premium.format() }}</span>
+    <span class="card__date">Desde el {{ policy.formattedStartDate }}</span>
+  </footer>
+</article>

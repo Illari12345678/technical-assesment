@@ -1,0 +1,20 @@
+<section class="page">
+  <header class="page__header">
+    <h1>Mis pólizas</h1>
+    <p>Consulta el estado y la prima de tus coberturas.</p>
+  </header>
+
+  @if (store.loading()) {
+    <p class="page__feedback">Cargando pólizas…</p>
+  } @else if (store.error()) {
+    <p class="page__feedback page__feedback--error">{{ store.error() }}</p>
+  } @else {
+    <div class="page__grid">
+      @for (policy of store.policies(); track policy.id) {
+        <app-policy-card [policy]="policy" (select)="openPolicy($event)" />
+      } @empty {
+        <p class="page__feedback">No hay pólizas disponibles.</p>
+      }
+    </div>
+  }
+</section>
