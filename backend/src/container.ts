@@ -1,7 +1,9 @@
 import { Router } from 'express';
 import { EnvConfig } from './config/env.config';
+import { CreatePolicyUseCase } from './application/use-cases/create-policy.usecase';
 import { GetAllPoliciesUseCase } from './application/use-cases/get-all-policies.usecase';
 import { GetPolicyByIdUseCase } from './application/use-cases/get-policy-by-id.usecase';
+import { UpdatePolicyUseCase } from './application/use-cases/update-policy.usecase';
 import { LoggerPort } from './domain/ports/logger.port';
 import { PolicyController } from './infrastructure/http/controllers/policy.controller';
 import { createPolicyRoutes } from './infrastructure/http/routes/policy.routes';
@@ -27,9 +29,17 @@ export const createContainer = (env: EnvConfig): AppContainer => {
   // Use cases
   const getAllPolicies = new GetAllPoliciesUseCase(policyRepository);
   const getPolicyById = new GetPolicyByIdUseCase(policyRepository);
+  const createPolicy = new CreatePolicyUseCase(policyRepository);
+  const updatePolicy = new UpdatePolicyUseCase(policyRepository);
 
   // Primary adapters (input ports)
-  const policyController = new PolicyController(getAllPolicies, getPolicyById, logger);
+  const policyController = new PolicyController(
+    getAllPolicies,
+    getPolicyById,
+    createPolicy,
+    updatePolicy,
+    logger,
+  );
   const policyRoutes = createPolicyRoutes(policyController);
 
   return { env, logger, policyRoutes };

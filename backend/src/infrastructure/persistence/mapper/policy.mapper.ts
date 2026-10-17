@@ -4,7 +4,7 @@ import { PolicyType } from '../../../domain/model/value-objects/policy-type.vo';
 import { PolicyStatus } from '../../../domain/model/value-objects/policy-status.vo';
 import { Premium } from '../../../domain/model/value-objects/premium.vo';
 
-/** Forma cruda persistida (registro) — espejo del JSON de la API. */
+/** Raw persisted shape (record) — mirrors the API JSON. */
 export interface PolicyRecord {
   id: string;
   policyNumber: string;
@@ -52,5 +52,10 @@ export class PolicyMapper {
       premium: policy.premium.toJSON(),
       startDate: policy.startDate.toISOString().slice(0, 10),
     };
+  }
+
+  /** Domain aggregate → persisted record (same shape as the API DTO). */
+  static toRecord(policy: Policy): PolicyRecord {
+    return PolicyMapper.toResponseDto(policy);
   }
 }

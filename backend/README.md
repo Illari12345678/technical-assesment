@@ -30,8 +30,10 @@ pnpm dev        # http://localhost:3000/api/policies
 
 See the shared contract in [`../docs/api-contract.md`](../docs/api-contract.md):
 
-- `GET /api/policies`
-- `GET /api/policies/:id` (404 with a uniform error shape, 400 for invalid UUID)
+- `GET /api/policies` — paginated + filterable (`?status=&type=&holderName=&page=&limit=`)
+- `GET /api/policies/:id` — 404 with a uniform error shape, 400 for invalid UUID
+- `POST /api/policies` — 201 (+ `Location`), 400 validation, 422 duplicate number
+- `PUT /api/policies/:id` — 200, 400 validation, 404 unknown, 422 illegal transition
 
 ## Architecture
 
@@ -43,9 +45,9 @@ src/
 ├── config/           # Env loading + validation (Zod, fail fast)
 ├── domain/           # Core enterprise: entities, value objects, errors, ports
 │   ├── model/          # Policy aggregate + VOs (PolicyId, PolicyType, PolicyStatus, Premium)
-│   ├── errors/         # DomainError base + PolicyNotFoundError
+│   ├── errors/         # DomainError base + not-found / already-exists / invalid-* (404/422)
 │   └── ports/          # PolicyRepositoryPort, LoggerPort (interfaces)
-├── application/      # Use cases (GetAllPolicies, GetPolicyById)
+├── application/      # Use cases (GetAllPolicies, GetPolicyById, CreatePolicy, UpdatePolicy)
 ├── infrastructure/   # Adapters
 │   ├── persistence/    # In-memory repository + PolicyMapper
 │   ├── http/           # Controllers, Zod schemas, error handler, routes
@@ -54,6 +56,10 @@ src/
 ├── container.ts      # Composition Root: the ONLY place that wires concretes
 └── main.ts           # Bootstrap (loadEnvConfig → container → listen)
 ```
+
+Business rules live in the aggregate: `Policy.create` enforces the creation
+invariants and `Policy.changeStatus` the allowed lifecycle transitions. The
+HTTP edge only translates (Zod shapes in, uniform errors out).
 
 Rules:
 
@@ -74,9 +80,13 @@ Invalid values abort the process at startup (fail fast).
 
 ## Testing
 
-- `test/use-cases.test.ts` — use-case unit tests with a fake repository port.
+- `test/policy.domain.test.ts` — aggregate rules: `Policy.create` invariants
+  and the status-transition lifecycle.
+- `test/use-cases.test.ts` — use-case unit tests with a fake repository port
+  (default pagination, filters, duplicate number, illegal transition).
 - `test/policy.routes.test.ts` — integration tests over the real Express app
-  (supertest): 200, 404 uniform error shape, 400 validation.
+  (supertest): list envelope, filters (status/type/holder name), pagination,
+  `201`/`400`/`404`/`422` on create and update.
 
 ## Docker
 

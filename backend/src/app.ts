@@ -1,7 +1,10 @@
 import express, { Express } from 'express';
 import cors from 'cors';
 import { AppContainer } from './container';
-import { errorHandler } from './infrastructure/http/middlewares/error-handler.middleware';
+import {
+  errorHandler,
+  notFoundHandler,
+} from './infrastructure/http/middlewares/error-handler.middleware';
 
 /**
  * HTTP app mounting. Kept separate from main.ts so the API can be
@@ -15,6 +18,7 @@ export const createApp = (container: AppContainer): Express => {
   app.use(cors({ origin: container.env.corsOrigins }));
 
   app.use('/api', container.policyRoutes);
+  app.use('/api', notFoundHandler);
 
   app.use(errorHandler(container.logger));
 

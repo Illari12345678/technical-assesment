@@ -3,6 +3,17 @@ export const POLICY_STATUSES = ['ACTIVE', 'PENDING', 'CANCELLED', 'EXPIRED'] as 
 export type PolicyStatusValue = (typeof POLICY_STATUSES)[number];
 
 /**
+ * Allowed lifecycle transitions per source status.
+ * CANCELLED and EXPIRED are terminal: no outgoing transitions.
+ */
+const ALLOWED_TRANSITIONS: Record<PolicyStatusValue, readonly PolicyStatusValue[]> = {
+  PENDING: ['ACTIVE', 'CANCELLED'],
+  ACTIVE: ['CANCELLED', 'EXPIRED'],
+  CANCELLED: [],
+  EXPIRED: [],
+};
+
+/**
  * Value Object: policy lifecycle status.
  */
 export class PolicyStatus {
@@ -36,6 +47,15 @@ export class PolicyStatus {
 
   isActive(): boolean {
     return this.value === 'ACTIVE';
+  }
+
+  isTerminal(): boolean {
+    return ALLOWED_TRANSITIONS[this.value].length === 0;
+  }
+
+  /** Same status is always allowed (idempotent update); otherwise the move must be declared. */
+  canTransitionTo(next: PolicyStatus): boolean {
+    return this.equals(next) || ALLOWED_TRANSITIONS[this.value].includes(next.value);
   }
 
   equals(other: PolicyStatus): boolean {
