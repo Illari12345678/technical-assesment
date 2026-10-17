@@ -50,7 +50,7 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - run: pnpm run lint
       - run: pnpm run typecheck
-      - run: pnpm test -- --coverage
+      - run: pnpm test --coverage
       - run: pnpm run build
 
   frontend:
@@ -71,12 +71,12 @@ jobs:
           cache: pnpm
           cache-dependency-path: frontend/pnpm-lock.yaml
       - run: pnpm install --frozen-lockfile
-      # ubuntu-latest trae Chrome preinstalado → Karma/ChromeHeadless funciona
-      - run: pnpm test -- --watch=false --browsers=ChromeHeadless
+      # ubuntu-latest ships Chrome preinstalled → Karma/ChromeHeadless works
+      - run: pnpm test --watch=false --browsers=ChromeHeadless
       - run: pnpm run build
 
   docker:
-    name: Docker — build & push (solo main)
+    name: Docker — build & push (main only)
     runs-on: ubuntu-latest
     needs: [changes, backend, frontend]
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'

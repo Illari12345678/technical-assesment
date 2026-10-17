@@ -1,0 +1,89 @@
+# GitLab CI — lint + test for both independent packages.
+#
+#   lint  → backend ESLint + typecheck, frontend ESLint
+#   test  → backend Jest (+coverage), frontend Karma (headless Chromium)
+#
+# pnpm comes from Corepack; the exact version is pinned in each
+# `package.json#packageManager`, so no version is hardcoded here.
+
+stages:
+  - lint
+  - test
+
+default:
+  image: node:20-bookworm
+  interruptible: true
+  before_script:
+    - corepack enable
+
+variables:
+  COREPACK_ENABLE_DOWNLOAD_PROMPT: "0"
+
+# ---------------------------------------------------------------------------
+# lint
+# ---------------------------------------------------------------------------
+
+backend:lint:
+  stage: lint
+  cache:
+    key:
+      files:
+        - backend/pnpm-lock.yaml
+    paths:
+      - backend/.pnpm-store
+  script:
+    - cd backend
+    - pnpm install --frozen-lockfile --store-dir .pnpm-store
+    - pnpm run lint
+    - pnpm run typecheck
+
+frontend:lint:
+  stage: lint
+  cache:
+    key:
+      files:
+        - frontend/pnpm-lock.yaml
+    paths:
+      - frontend/.pnpm-store
+  script:
+    - cd frontend
+    - pnpm install --frozen-lockfile --store-dir .pnpm-store
+    - pnpm run lint
+
+# -------------------------------------------------------------------------
+# test
+# -------------------------------------------------------------------------
+
+backend:test:
+  stage: test
+  cache:
+    key:
+      files:
+        - backend/pnpm-lock.yaml
+    paths:
+      - backend/.pnpm-store
+  script:
+    - cd backend
+    - pnpm install --frozen-lockfile --store-dir .pnpm-store
+    - pnpm test --coverage
+
+frontend:test:
+  stage: test
+  # Karma needs a real browser; the Debian Chromium package provides one and
+  # `karma.conf.js` launches it headless with --no-sandbox (CI runs as root).
+  before_script:
+    - apt-get update
+    - apt-get install -y --no-install-recommends chromium
+    - corepack enable
+    - export CHROME_BIN=/usr/bin/chromium
+  cache:
+    key:
+      files:
+        - frontend/pnpm-lock.yaml
+    paths:
+      - frontend/.pnpm-store
+  script:
+    - cd frontend
+    - pnpm install --frozen-lockfile --store-dir .pnpm-store
+    - pnpm exec ng test --watch=false
+    - pnpm run build

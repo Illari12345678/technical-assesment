@@ -48,13 +48,27 @@ The frontend calls the backend at the absolute URL `http://localhost:3000/api`
 
 ## Useful scripts
 
-| Command            | Description                        |
-| ------------------ | ---------------------------------- |
-| `pnpm dev`         | Watch-mode dev server (both apps)  |
-| `pnpm run build`   | Production build                   |
-| `pnpm test`        | Tests (backend: Jest + supertest)  |
-| `pnpm run lint`    | ESLint                             |
-| `pnpm run typecheck` | TypeScript type check (backend)  |
+| Command            | Description                        | Where    |
+| ------------------ | ---------------------------------- | -------- |
+| `pnpm dev`         | Watch-mode dev server              | backend  |
+| `pnpm start`       | Dev server (SPA)                   | frontend |
+| `pnpm run build`   | Production build                   | both     |
+| `pnpm test`        | Jest + supertest / Karma + Jasmine | both     |
+| `pnpm run lint`    | ESLint                             | both     |
+| `pnpm run typecheck` | TypeScript type check            | backend  |
+
+## API surface
+
+- `GET /api/policies?status=&type=&holderName=&page=&limit=` → `{ data, meta }` envelope
+- `GET /api/policies/:id`
+- `POST /api/policies` → `201` + `Location`
+- `PUT /api/policies/:id`
+
+The SPA lists, searches and filters policies and creates/edits them from a
+reactive form (`/policies/new`, `/policies/:id/edit`).
+
+Full request/response shapes and the error catalogue (`400`/`404`/`422`) are in
+[`docs/api-contract.md`](docs/api-contract.md).
 
 ## Architecture (Clean Architecture + DDD)
 
@@ -107,3 +121,17 @@ Workflow in `.github/workflows/ci.yml`:
 
 To deploy, add a final job that pulls the published images on the target
 server (SSH, Kubernetes, etc.) reusing the already-published tags.
+
+## CI (GitLab)
+
+`.gitlab-ci.yml` provides the same quality gate for GitLab-hosted pipelines,
+with two stages:
+
+1. **lint** — `backend:lint` (ESLint + `tsc --noEmit`) and `frontend:lint`
+   (angular-eslint).
+2. **test** — `backend:test` (Jest + coverage) and `frontend:test`
+  (installs Debian `chromium`, runs Karma headless via
+  `CHROME_BIN=/usr/bin/chromium`, then the production build).
+
+pnpm is provided by Corepack (`corepack enable`) and the pnpm store is cached
+per package.
