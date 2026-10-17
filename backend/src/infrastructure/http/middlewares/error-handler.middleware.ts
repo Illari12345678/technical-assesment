@@ -4,8 +4,8 @@ import { DomainError } from '../../../domain/errors/domain.error';
 import { LoggerPort } from '../../../domain/ports/logger.port';
 
 /**
- * Middleware centralizado: todos los errores salen con el mismo formato
- * `{ statusCode, code, message }` (ver docs/api-contract.md).
+ * Centralized middleware: every error responds with the same shape
+ * `{ statusCode, code, message }` (see docs/api-contract.md).
  */
 export const errorHandler = (logger: LoggerPort): ErrorRequestHandler => {
   return (error, _req, res, next) => {

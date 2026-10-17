@@ -10,7 +10,7 @@ const STATUS_LABELS: Record<PolicyStatusValue, string> = {
 };
 
 /**
- * Value Object: estado del ciclo de vida de la póliza.
+ * Value Object: policy lifecycle status.
  */
 export class PolicyStatusVO {
   private constructor(readonly value: PolicyStatusValue) {}

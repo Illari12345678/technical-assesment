@@ -1,23 +1,35 @@
-# technical-assesment
+# Technical Assessment
 
-Proyecto full-stack con dos aplicaciones independientes siguiendo **Clean
-Architecture + DDD**:
+Full-stack project composed of two independent applications following
+**Clean Architecture + DDD**:
 
-| Carpeta     | Stack                                | Puerto |
-| ----------- | ------------------------------------ | ------ |
-| `backend/`  | Node.js + Express + TypeScript + Zod | 3000   |
-| `frontend/` | Angular 17 (standalone)              | 4200   |
+| Folder      | Stack                                    | Port |
+| ----------- | ---------------------------------------- | ---- |
+| `backend/`  | Node.js + Express + TypeScript + Zod     | 3000 |
+| `frontend/` | Angular 17 (standalone)                  | 4200 |
 
-El contrato REST compartido está documentado en [`docs/api-contract.md`](docs/api-contract.md).
+The shared REST contract is documented in [`docs/api-contract.md`](docs/api-contract.md).
 
-## Requisitos
+## Requirements
 
 - Node.js >= 20
-- pnpm 12 (vía corepack: `corepack enable pnpm`, la versión exacta está en `package.json#packageManager`)
+- pnpm 12 (via corepack: `corepack enable pnpm`; the exact version is pinned in
+  each `package.json#packageManager`)
+- Docker (optional, for the containerized setup)
 
-## Arranque en desarrollo
+## Quick start (single command)
 
-Cada aplicación es un repo/package independiente con su propio `package.json`:
+```bash
+./tools/build-and-run-dev.sh              # installs deps if missing and starts both apps
+./tools/build-and-run-dev.sh --reinstall  # forces pnpm install before starting
+```
+
+Starts the backend on `:3000` and the frontend on `:4200` in parallel; `Ctrl+C`
+stops both.
+
+## Manual start (development)
+
+Each application is an independent package with its own `package.json`:
 
 ```bash
 # Terminal 1 — API
@@ -31,74 +43,67 @@ pnpm install
 pnpm start      # http://localhost:4200
 ```
 
-El frontend llama en absolutos a `http://localhost:3000/api` (CORS directo,
-configurado en el backend vía `CORS_ORIGINS`).
+The frontend calls the backend at the absolute URL `http://localhost:3000/api`
+(direct CORS, configured on the backend via `CORS_ORIGINS`).
 
-## Arranque con un solo comando
+## Useful scripts
 
-```bash
-./tools/build-and-run-dev.sh              # instala si falta node_modules y arranca ambas apps
-./tools/build-and-run-dev.sh --reinstall  # fuerza pnpm install antes de arrancar
-```
+| Command            | Description                        |
+| ------------------ | ---------------------------------- |
+| `pnpm dev`         | Watch-mode dev server (both apps)  |
+| `pnpm run build`   | Production build                   |
+| `pnpm test`        | Tests (backend: Jest + supertest)  |
+| `pnpm run lint`    | ESLint                             |
+| `pnpm run typecheck` | TypeScript type check (backend)  |
 
-Levanta el backend en `:3000` y el frontend en `:4200` en paralelo; `Ctrl+C`
-detiene ambos.
+## Architecture (Clean Architecture + DDD)
 
-## Scripts útiles
-
-| Comando              | Descripción                          |
-| -------------------- | ------------------------------------ |
-| `pnpm dev`           | Arranque con watch (ambas apps)      |
-| `pnpm run build`     | Build de producción                  |
-| `pnpm test`          | Tests (backend: Jest + supertest)    |
-| `pnpm run lint`      | ESLint                               |
-
-## Estructura (Clean Architecture + DDD)
-
-Ambas aplicaciones comparten la misma separación de capas y la misma regla de
-dependencia: `domain` no importa nada de fuera → `application` solo conoce
-`domain` y los puertos → `infrastructure` implementa los puertos → el ensamblaje
-ocurre en el composition root (`container.ts` en el backend, Angular DI en el
-frontend).
+Both applications share the same layer separation and the same dependency rule:
+`domain` imports nothing from outside → `application` only knows `domain` and
+the ports → `infrastructure` implements the ports → assembly happens in the
+composition root (`container.ts` on the backend, Angular DI on the frontend).
 
 ```
-domain/         entidades, value objects, errores y puertos (interfaz)
-application/    casos de uso
-infrastructure/ adaptadores (HTTP, repositorios, logging, DTOs, mappers)
-presentation/   solo en el frontend: components, pages, state (Signals)
+domain/         entities, value objects, errors and ports (interfaces)
+application/    use cases
+infrastructure/ adapters (HTTP, repositories, logging, DTOs, mappers)
+presentation/   frontend only: components, pages, state (Signals)
 ```
+
+See [`backend/README.md`](backend/README.md) and
+[`frontend/README.md`](frontend/README.md) for per-app details.
 
 ## Docker
 
-Cada aplicación tiene su Dockerfile multi-stage (build → runtime mínimo):
-el backend corre `node dist/main.js` como usuario no root en `node:20-alpine`,
-el frontend sirve los estáticos con nginx (con SPA fallback y cache de assets).
+Each application ships a multi-stage Dockerfile (build → minimal runtime): the
+backend runs `node dist/main.js` as a non-root user on `node:20-alpine`, the
+frontend serves the static build with nginx (SPA fallback + asset caching).
 
 ```bash
 docker compose up --build
 # Frontend: http://localhost:8080  ·  Backend: http://localhost:3000/api/policies
 ```
 
-La URL del API para el frontend se inyecta en **time de build** (sin tocar
-código) mediante el build-arg `API_URL`:
+The frontend API URL is injected at **build time** (no code changes) through
+the `API_URL` build arg:
 
 - `docker-compose.yml` → `http://localhost:3000/api`
-- CI → variable `API_URL` del repositorio de GitHub
+- CI → the repository variable `API_URL`
 
-El backend conoce los orígenes permitidos vía `CORS_ORIGINS` (en compose:
-`http://localhost:8080`).
+The backend knows the allowed origins via `CORS_ORIGINS`
+(`http://localhost:8080` in compose).
 
 ## CI/CD (GitHub Actions)
 
-Workflow en `.github/workflows/ci.yml`:
+Workflow in `.github/workflows/ci.yml`:
 
-1. **Paths filters** (`dorny/paths-filter`): solo se ejecuta lo afectado por
-   los cambios en `backend/**` o `frontend/**`.
+1. **Paths filters** (`dorny/paths-filter`): only jobs affected by changes in
+   `backend/**` or `frontend/**` run.
 2. **Backend**: `lint → typecheck → test (--coverage) → build`.
 3. **Frontend**: `test` (Karma/ChromeHeadless) → `build`.
-4. **Docker** (solo push a `main`): build + push de ambas imágenes a GHCR
-   (`ghcr.io/<repo>-backend`, `ghcr.io/<repo>-frontend`) taggeadas con
-   `latest` y el SHA del commit, con cache GHA.
+4. **Docker** (main pushes only): build + push of both images to GHCR
+   (`ghcr.io/<repo>-backend`, `ghcr.io/<repo>-frontend`) tagged with `latest`
+   and the commit SHA, with GHA cache.
 
-Para desplegar: añadir un job final que haga pull de las imágenes en el
-servidor de destino (SSH, Kubernetes, etc.) reutilizando los tags ya publicados.
+To deploy, add a final job that pulls the published images on the target
+server (SSH, Kubernetes, etc.) reusing the already-published tags.

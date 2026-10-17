@@ -9,8 +9,8 @@ import {
 } from '../application/policies.usecases';
 
 /**
- * Store basado en Signals: estado + acciones de carga.
- * La presentación solo interactúa con este store y las entidades de dominio.
+ * Signals-based store: state + loading actions.
+ * Presentation only interacts with this store and domain entities.
  */
 @Injectable({ providedIn: 'root' })
 export class PoliciesStore {

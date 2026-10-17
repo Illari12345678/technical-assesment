@@ -3,7 +3,7 @@ export const POLICY_STATUSES = ['ACTIVE', 'PENDING', 'CANCELLED', 'EXPIRED'] as 
 export type PolicyStatusValue = (typeof POLICY_STATUSES)[number];
 
 /**
- * Value Object: estado del ciclo de vida de la póliza.
+ * Value Object: policy lifecycle status.
  */
 export class PolicyStatus {
   private constructor(private readonly value: PolicyStatusValue) {}

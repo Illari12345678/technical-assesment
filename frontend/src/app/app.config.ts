@@ -16,8 +16,8 @@ import {
 } from './features/policies/application/policies.usecases';
 
 /**
- * Composition Root del frontend: único punto donde se ensamblan puertos
- * e implementaciones concretas (igual que container.ts en el backend).
+ * Frontend Composition Root: the only place where ports are bound to
+ * concrete adapters (mirrors container.ts on the backend).
  */
 export const appConfig: ApplicationConfig = {
   providers: [

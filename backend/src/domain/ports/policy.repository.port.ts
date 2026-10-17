@@ -2,8 +2,8 @@ import { Policy } from '../model/policy';
 import { PolicyId } from '../model/value-objects/policy-id.vo';
 
 /**
- * Puerto de salida secundario: el dominio define QUÉ necesita persistir;
- * la infraestructura decide CÓMO.
+ * Secondary output port: the domain defines WHAT needs persisting;
+ * the infrastructure decides HOW.
  */
 export interface PolicyRepositoryPort {
   findAll(): Promise<Policy[]>;

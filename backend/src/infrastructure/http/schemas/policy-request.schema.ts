@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-/** Validación de entrada: parámetro de ruta `:id` (UUID). */
+/** Input validation: `:id` route parameter (UUID). */
 export const GetPolicyParamsSchema = z.object({
   id: z.string().uuid(),
 });

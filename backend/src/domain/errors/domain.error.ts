@@ -1,6 +1,6 @@
 /**
- * Excepción base del dominio. Transporta un `code` estable y un
- * `statusCode` HTTP sugerido para la capa HTTP sin acoplar el dominio a Express.
+ * Base domain exception. Carries a stable `code` and a suggested HTTP
+ * `statusCode` so the HTTP layer stays decoupled from Express.
  */
 export abstract class DomainError extends Error {
   abstract readonly code: string;

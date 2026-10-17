@@ -3,7 +3,7 @@ export const SUPPORTED_CURRENCIES = ['EUR', 'USD', 'GBP'] as const;
 export type Currency = (typeof SUPPORTED_CURRENCIES)[number];
 
 /**
- * Value Object: prima de la póliza. Importe positivo + moneda soportada.
+ * Value Object: policy premium. Positive amount + supported currency.
  */
 export class Premium {
   private constructor(

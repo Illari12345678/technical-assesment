@@ -41,7 +41,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v4
-        # La versión viene de package.json#packageManager
+        # Version comes from package.json#packageManager
       - uses: actions/setup-node@v4
         with:
           node-version: 20
@@ -64,7 +64,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v4
-        # La versión viene de package.json#packageManager
+        # Version comes from package.json#packageManager
       - uses: actions/setup-node@v4
         with:
           node-version: 20
@@ -110,8 +110,8 @@ jobs:
         with:
           context: ./frontend
           push: true
-          # La URL del API en producción se inyecta aquí en time de build.
-          # Ajustar al dominio real del despliegue (variable del repo).
+          # The production API URL is injected here at build time.
+          # Adjust it to the deployment domain (repository variable).
           build-args: |
             API_URL=${{ vars.API_URL }}
           tags: |

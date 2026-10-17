@@ -2,8 +2,8 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { PolicyEntity } from '../../../domain/models/policy.entity';
 
 /**
- * Componente dumb: recibe una entidad de dominio y emite su evento.
- * No conoce HTTP, DTOs ni el store.
+ * Dumb component: receives a domain entity and emits its event.
+ * Knows nothing about HTTP, DTOs or the store.
  */
 @Component({
   selector: 'app-policy-card',

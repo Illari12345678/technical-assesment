@@ -6,7 +6,7 @@ import { PolicyMapper } from '../../persistence/mapper/policy.mapper';
 import { GetPolicyParamsSchema } from '../schemas/policy-request.schema';
 
 /**
- * Adaptador primario: traduce HTTP ⇄ casos de uso. No contiene lógica de negocio.
+ * Primary adapter: translates HTTP ⇄ use cases. Holds no business logic.
  */
 export class PolicyController {
   constructor(

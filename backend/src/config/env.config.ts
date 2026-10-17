@@ -16,7 +16,7 @@ export interface EnvConfig {
 }
 
 /**
- * Carga y valida las variables de entorno (fail fast: proceso inválido → exit 1).
+ * Loads and validates environment variables (fail fast: invalid input → exit 1).
  */
 export const loadEnvConfig = (raw: NodeJS.ProcessEnv = process.env): EnvConfig => {
   const parsed = EnvSchema.safeParse(raw);

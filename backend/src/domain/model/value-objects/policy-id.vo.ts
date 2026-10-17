@@ -1,8 +1,8 @@
 import { randomUUID } from 'node:crypto';
 
 /**
- * Value Object: identificador inmutable de una póliza.
- * Se autogenera con UUID v4 o se reconstruye desde persistencia.
+ * Value Object: immutable policy identifier.
+ * Self-generated UUID v4 or reconstituted from persistence.
  */
 export class PolicyId {
   private constructor(private readonly value: string) {}

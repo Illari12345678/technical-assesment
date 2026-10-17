@@ -6,8 +6,8 @@ import { PolicyResponseDto } from '../dtos/policy-response.dto';
 import { PolicyMapper } from '../mappers/policy.mapper';
 
 /**
- * Adaptador HTTP: implementa el puerto del dominio con HttpClient.
- * El único punto que conoce la URL del backend y la forma del JSON.
+ * HTTP adapter: implements the domain port with HttpClient.
+ * The only place that knows the backend URL and the JSON shape.
  */
 export class HttpPolicyRepository implements PolicyRepository {
   constructor(

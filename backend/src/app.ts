@@ -4,8 +4,8 @@ import { AppContainer } from './container';
 import { errorHandler } from './infrastructure/http/middlewares/error-handler.middleware';
 
 /**
- * Montaje de la aplicación HTTP. Separado de main.ts para poder testear
- * la API con supertest sin arrancar el servidor.
+ * HTTP app mounting. Kept separate from main.ts so the API can be
+ * tested with supertest without starting the server.
  */
 export const createApp = (container: AppContainer): Express => {
   const app = express();

@@ -5,8 +5,8 @@ import { PolicyMapper, PolicyRecord } from '../mapper/policy.mapper';
 import { POLICY_SEED } from './policy-seed';
 
 /**
- * Adaptador secundario: repositorio en memoria con datos seed.
- * El mapeo record → entidad lo realiza PolicyMapper.
+ * Secondary adapter: in-memory repository with seed data.
+ * PolicyMapper performs the record → entity mapping.
  */
 export class InMemoryPolicyRepository implements PolicyRepositoryPort {
   private readonly records: PolicyRecord[];

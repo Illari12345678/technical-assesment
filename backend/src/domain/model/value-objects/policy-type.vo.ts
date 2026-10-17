@@ -3,7 +3,7 @@ export const POLICY_TYPES = ['AUTO', 'HOME', 'LIFE', 'HEALTH', 'TRAVEL'] as cons
 export type PolicyTypeValue = (typeof POLICY_TYPES)[number];
 
 /**
- * Value Object: tipo de cobertura de la póliza.
+ * Value Object: policy coverage type.
  */
 export class PolicyType {
   private constructor(private readonly value: PolicyTypeValue) {}

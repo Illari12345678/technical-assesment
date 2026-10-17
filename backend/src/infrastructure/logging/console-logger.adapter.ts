@@ -3,8 +3,8 @@ import { LoggerPort } from '../../domain/ports/logger.port';
 type LogLevel = 'DEBUG' | 'INFO' | 'WARN' | 'ERROR';
 
 /**
- * Adaptador primario/secundario de logging: salida por consola con formato
- * estructurado. Sustituible por Winston/Pino sin tocar el dominio.
+ * Logging adapter: console output with structured format.
+ * Swappable for Winston/Pino without touching the domain.
  */
 export class ConsoleLoggerAdapter implements LoggerPort {
   private log(level: LogLevel, message: string, meta?: Record<string, unknown>): void {

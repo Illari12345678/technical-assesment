@@ -15,20 +15,20 @@ export interface AppContainer {
 }
 
 /**
- * Composition Root: ÚNICO punto de la aplicación donde se instancian
- * concretos (adaptadores) y se ensamblan con las abstracciones (puertos).
+ * Composition Root: the ONLY place in the app where concrete adapters
+ * are instantiated and wired to the abstractions (ports).
  */
 export const createContainer = (env: EnvConfig): AppContainer => {
   const logger = new ConsoleLoggerAdapter();
 
-  // Adaptadores secundarios (puertos de salida)
+  // Secondary adapters (output ports)
   const policyRepository = new InMemoryPolicyRepository();
 
-  // Casos de uso
+  // Use cases
   const getAllPolicies = new GetAllPoliciesUseCase(policyRepository);
   const getPolicyById = new GetPolicyByIdUseCase(policyRepository);
 
-  // Adaptadores primarios (puertos de entrada)
+  // Primary adapters (input ports)
   const policyController = new PolicyController(getAllPolicies, getPolicyById, logger);
   const policyRoutes = createPolicyRoutes(policyController);
 

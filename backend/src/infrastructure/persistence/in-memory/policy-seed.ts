@@ -1,7 +1,7 @@
 import { PolicyRecord } from '../mapper/policy.mapper';
 
 /**
- * Datos seed del repositorio en memoria.
+ * Seed data for the in-memory repository.
  */
 export const POLICY_SEED: PolicyRecord[] = [
   {

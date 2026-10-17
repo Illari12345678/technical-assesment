@@ -3,8 +3,8 @@ import { Observable } from 'rxjs';
 import { PolicyEntity } from '../models/policy.entity';
 
 /**
- * Puerto (abstracción): el dominio define QUÉ necesita; la infraestructura
- * decide CÓMO (HTTP hoy, mock o IndexedDB mañana).
+ * Port (abstraction): the domain defines WHAT it needs; the infrastructure
+ * decides HOW (HTTP today, mock or IndexedDB tomorrow).
  */
 export abstract class PolicyRepository {
   abstract findAll(): Observable<PolicyEntity[]>;

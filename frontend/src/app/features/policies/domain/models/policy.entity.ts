@@ -2,8 +2,8 @@ import { PolicyStatusVO } from './value-objects/policy-status.vo';
 import { PremiumVO } from './value-objects/premium.vo';
 
 /**
- * Entidad de dominio: la capa de presentación trabaja SIEMPRE con este
- * modelo (nunca con el DTO crudo del backend).
+ * Domain entity: the presentation layer ALWAYS works with this
+ * model (never with the raw backend DTO).
  */
 export class PolicyEntity {
   constructor(

@@ -1,5 +1,5 @@
-# Settings de pnpm (pnpm 12+ lee la configuración aquí, no en package.json)
-# Permite los scripts de instalación de paquetes que los necesitan (esbuild).
+# pnpm settings (pnpm 12+ reads configuration here, not in package.json)
+# Allows install scripts for packages that need them (esbuild).
 allowBuilds:
   esbuild: true
   nice-napi: true

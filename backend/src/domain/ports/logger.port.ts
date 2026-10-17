@@ -1,5 +1,5 @@
 /**
- * Puerto de salida transversal: logging como abstracción del dominio.
+ * Cross-cutting output port: logging as a domain abstraction.
  */
 export interface LoggerPort {
   debug(message: string, meta?: Record<string, unknown>): void;

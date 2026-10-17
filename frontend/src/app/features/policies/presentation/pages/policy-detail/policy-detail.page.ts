@@ -4,7 +4,7 @@ import { map } from 'rxjs';
 import { PoliciesStore } from '../../../state/policies.store';
 
 /**
- * Página smart de detalle: carga la póliza por id (ruta) vía el store.
+ * Smart detail page: loads the policy by id (route param) via the store.
  */
 @Component({
   selector: 'app-policy-detail-page',

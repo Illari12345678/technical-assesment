@@ -1,7 +1,7 @@
 /**
- * Réplica exacta del JSON producido por el backend.
- * Ver docs/api-contract.md — cualquier cambio empieza aquí y en el mapper
- * del backend, nunca en la presentación.
+ * Exact replica of the JSON produced by the backend.
+ * See docs/api-contract.md — any change starts here and in the backend
+ * mapper, never in the presentation layer.
  */
 export interface PremiumDto {
   amount: number;

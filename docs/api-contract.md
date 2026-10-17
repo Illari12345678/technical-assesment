@@ -1,16 +1,16 @@
 # API Contract — Policies
 
-Contrato REST compartido entre `backend/` y `frontend/`. Cualquier cambio de forma
-debe reflejarse aquí primero, y después en ambos lados:
+Shared REST contract between `backend/` and `frontend/`. Any shape change must
+be reflected here first, and then on both sides:
 
-- **Backend**: `src/infrastructure/persistence/mapper/policy.mapper.ts` (producción del JSON).
-- **Frontend**: `src/app/features/policies/infrastructure/dtos/policy-response.dto.ts` (réplica exacta).
+- **Backend**: `src/infrastructure/persistence/mapper/policy.mapper.ts` (produces the JSON).
+- **Frontend**: `src/app/features/policies/infrastructure/dtos/policy-response.dto.ts` (exact replica).
 
 ## Endpoints
 
 ### `GET /api/policies`
 
-Lista completa de pólizas.
+Full list of policies.
 
 **Response `200`**
 
@@ -30,11 +30,11 @@ Lista completa de pólizas.
 
 ### `GET /api/policies/:id`
 
-Detalle de una póliza. `:id` debe ser un UUID v4.
+Single policy detail. `:id` must be a UUID.
 
-**Response `200`**: un único objeto con la forma anterior.
+**Response `200`**: a single object with the shape above.
 
-**Response `404`** si no existe:
+**Response `404`** when it does not exist:
 
 ```json
 {
@@ -44,7 +44,7 @@ Detalle de una póliza. `:id` debe ser un UUID v4.
 }
 ```
 
-**Response `400`** si el parámetro no es un UUID válido:
+**Response `400`** when the parameter is not a valid UUID:
 
 ```json
 {
@@ -54,21 +54,22 @@ Detalle de una póliza. `:id` debe ser un UUID v4.
 }
 ```
 
-## Tipos de campo
+## Field types
 
-| Campo         | Tipo                    | Valores                                    |
-| ------------- | ----------------------- | ------------------------------------------ |
-| `id`          | UUID v4                 |                                            |
-| `policyNumber`| string                  | `POL-<año>-<n>`                            |
-| `type`        | enum string             | `AUTO`, `HOME`, `LIFE`, `HEALTH`, `TRAVEL` |
-| `status`      | enum string             | `ACTIVE`, `PENDING`, `CANCELLED`, `EXPIRED`|
-| `holderName`  | string                  |                                            |
-| `premium`     | object                  | `{ amount: number (> 0), currency: string }`|
-| `currency`    | enum string             | `EUR`, `USD`, `GBP`                        |
-| `startDate`   | ISO date string         | `YYYY-MM-DD`                               |
+| Field          | Type       | Values                                     |
+| -------------- | ---------- | ------------------------------------------ |
+| `id`           | UUID       |                                            |
+| `policyNumber` | string     | `POL-<year>-<n>`                           |
+| `type`         | enum string| `AUTO`, `HOME`, `LIFE`, `HEALTH`, `TRAVEL` |
+| `status`       | enum string| `ACTIVE`, `PENDING`, `CANCELLED`, `EXPIRED`|
+| `holderName`   | string     |                                            |
+| `premium`      | object     | `{ amount: number (> 0), currency: string }` |
+| `currency`     | enum string| `EUR`, `USD`, `GBP`                        |
+| `startDate`    | ISO date   | `YYYY-MM-DD`                               |
 
 ## CORS
 
-El backend permite explícitamente el origen del frontend (configurado vía la
-variable de entorno `CORS_ORIGINS`, por defecto `http://localhost:4200`).
-El frontend llama a la URL absoluta del backend (`http://localhost:3000/api`).
+The backend explicitly allows the frontend origin (configured via the
+`CORS_ORIGINS` environment variable, default `http://localhost:4200`).
+The frontend calls the backend at its absolute URL
+(`http://localhost:3000/api`).

@@ -5,8 +5,8 @@ import { PolicyEntity } from '../../../domain/models/policy.entity';
 import { PolicyCardComponent } from '../../components/policy-card/policy-card.component';
 
 /**
- * Página smart: carga los datos vía el store y delega el rendering
- * al componente dumb PolicyCardComponent.
+ * Smart page: loads data via the store and delegates rendering to the
+ * dumb PolicyCardComponent.
  */
 @Component({
   selector: 'app-policy-list-page',

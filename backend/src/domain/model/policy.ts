@@ -14,14 +14,14 @@ export interface PolicyProps {
 }
 
 /**
- * Agregado raíz: Póliza. Inmutable salvo por transiciones de estado.
+ * Root aggregate: Policy. Immutable except for status transitions.
  */
 export class Policy {
   private constructor(
     private readonly props: PolicyProps,
   ) {}
 
-  /** Reconstrucción desde persistencia (sin reglas de creación). */
+  /** Reconstitution from persistence (bypasses creation rules). */
   static reconstitute(props: PolicyProps): Policy {
     if (props.policyNumber.trim().length === 0) {
       throw new Error('Policy number cannot be empty');
@@ -64,7 +64,7 @@ export class Policy {
     return this.props.status.isActive();
   }
 
-  /** Regla de dominio: solo una póliza vigente puede pasar a cancelada. */
+  /** Domain rule: only an ACTIVE policy can be cancelled. */
   cancel(): void {
     if (!this.isActive()) {
       throw new Error(

@@ -4,7 +4,7 @@ import { PremiumVO } from '../../domain/models/value-objects/premium.vo';
 import { PolicyResponseDto } from '../dtos/policy-response.dto';
 
 /**
- * Único punto de traducción DTO ⇄ entidad de dominio.
+ * Single translation point between DTO ⇄ domain entity.
  */
 export class PolicyMapper {
   static toEntity(dto: PolicyResponseDto): PolicyEntity {

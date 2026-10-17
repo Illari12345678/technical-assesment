@@ -26,8 +26,8 @@ export interface PolicyResponseDto {
 }
 
 /**
- * Mapper entre la forma persistida (o de la API) y el agregado de dominio.
- * Único lugar donde se conoce la forma del JSON — ver docs/api-contract.md.
+ * Mapper between the persisted (or API) shape and the domain aggregate.
+ * The single place that knows the JSON shape — see docs/api-contract.md.
  */
 export class PolicyMapper {
   static toDomain(record: PolicyRecord): Policy {
