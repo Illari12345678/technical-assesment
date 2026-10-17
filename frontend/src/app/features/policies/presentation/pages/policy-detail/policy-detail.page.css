@@ -73,6 +73,27 @@
   margin: 0;
 }
 
+.detail__actions {
+  margin-top: 1.75rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid #e2e8f0;
+}
+
+.detail__edit {
+  display: inline-block;
+  padding: 0.55rem 1rem;
+  border-radius: 8px;
+  background: #1d4ed8;
+  color: #fff;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.detail__edit:hover {
+  background: #1e40af;
+}
+
 .detail__grid dt {
   font-size: 0.8rem;
   font-weight: 600;

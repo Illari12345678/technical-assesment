@@ -35,6 +35,10 @@
           <dd>{{ policy.formattedStartDate }}</dd>
         </div>
       </dl>
+
+      <footer class="detail__actions">
+        <a class="detail__edit" [routerLink]="['/policies', policy.id, 'edit']">Editar póliza</a>
+      </footer>
     </article>
   } @else if (store.error()) {
     <p class="page__feedback page__feedback--error">{{ store.error() }}</p>

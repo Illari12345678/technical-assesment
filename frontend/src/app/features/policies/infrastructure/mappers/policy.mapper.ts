@@ -1,7 +1,8 @@
 import { PolicyEntity } from '../../domain/models/policy.entity';
+import { PolicyPage } from '../../domain/models/policy-page';
 import { PolicyStatusVO } from '../../domain/models/value-objects/policy-status.vo';
 import { PremiumVO } from '../../domain/models/value-objects/premium.vo';
-import { PolicyResponseDto } from '../dtos/policy-response.dto';
+import { PaginatedPoliciesDto, PolicyResponseDto } from '../dtos/policy-response.dto';
 
 /**
  * Single translation point between DTO ⇄ domain entity.
@@ -21,5 +22,18 @@ export class PolicyMapper {
 
   static toEntities(dtos: PolicyResponseDto[]): PolicyEntity[] {
     return dtos.map((dto) => PolicyMapper.toEntity(dto));
+  }
+
+  /** Envelope DTO → domain page (entities + metadata). */
+  static toPage(dto: PaginatedPoliciesDto): PolicyPage {
+    return {
+      items: PolicyMapper.toEntities(dto.data),
+      meta: {
+        page: dto.meta.page,
+        limit: dto.meta.limit,
+        total: dto.meta.total,
+        totalPages: dto.meta.totalPages,
+      },
+    };
   }
 }

@@ -4,6 +4,31 @@
     <p>Consulta el estado y la prima de tus coberturas.</p>
   </header>
 
+  <div class="page__toolbar">
+    <label class="page__search">
+      <input
+        type="search"
+        [formControl]="searchControl"
+        placeholder="Buscar por titular…"
+        aria-label="Buscar por titular"
+      />
+    </label>
+
+    <div class="page__actions">
+      <label class="page__filter">
+        <span>Estado</span>
+        <select [value]="store.statusFilter() ?? ''" (change)="onStatusChange($any($event.target).value)">
+          <option value="">Todas</option>
+          @for (option of statusOptions; track option.value) {
+            <option [value]="option.value">{{ option.label }}</option>
+          }
+        </select>
+      </label>
+
+      <button type="button" class="page__new" (click)="createPolicy()">Nueva póliza</button>
+    </div>
+  </div>
+
   @if (store.loading()) {
     <p class="page__feedback">Cargando pólizas…</p>
   } @else if (store.error()) {
@@ -11,10 +36,23 @@
   } @else {
     <div class="page__grid">
       @for (policy of store.policies(); track policy.id) {
-        <app-policy-card [policy]="policy" (select)="openPolicy($event)" />
+        <app-policy-card [policy]="policy" (selected)="openPolicy($event)" />
       } @empty {
         <p class="page__feedback">No hay pólizas disponibles.</p>
       }
     </div>
+
+    <nav class="page__pagination" aria-label="Paginación de pólizas">
+      <button type="button" [disabled]="!store.hasPreviousPage()" (click)="store.previousPage()">
+        Anterior
+      </button>
+      <span class="page__pagination-info">
+        Página {{ store.meta().page }} de {{ store.meta().totalPages || 1 }} ·
+        {{ store.meta().total }} pólizas
+      </span>
+      <button type="button" [disabled]="!store.hasNextPage()" (click)="store.nextPage()">
+        Siguiente
+      </button>
+    </nav>
   }
 </section>

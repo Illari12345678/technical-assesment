@@ -13,5 +13,5 @@ import { PolicyEntity } from '../../../domain/models/policy.entity';
 })
 export class PolicyCardComponent {
   @Input({ required: true }) policy!: PolicyEntity;
-  @Output() readonly select = new EventEmitter<PolicyEntity>();
+  @Output() readonly selected = new EventEmitter<PolicyEntity>();
 }

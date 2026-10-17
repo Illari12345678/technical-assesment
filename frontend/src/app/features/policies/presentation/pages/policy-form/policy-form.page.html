@@ -1,0 +1,21 @@
+<section class="page">
+  <a class="page__back" routerLink="/policies">← Volver a pólizas</a>
+
+  <h1>{{ isEdit ? 'Editar póliza' : 'Nueva póliza' }}</h1>
+
+  @if (isEdit && store.loading() && !store.selectedPolicy()) {
+    <p class="page__feedback">Cargando póliza…</p>
+  } @else {
+    @if (store.error(); as error) {
+      <p class="page__feedback page__feedback--error">{{ error }}</p>
+    }
+
+    <app-policy-form
+      [mode]="isEdit ? 'edit' : 'create'"
+      [policy]="store.selectedPolicy()"
+      [submitting]="store.loading()"
+      (submitted)="onSubmit($event)"
+      (cancelled)="onCancel()"
+    />
+  }
+</section>

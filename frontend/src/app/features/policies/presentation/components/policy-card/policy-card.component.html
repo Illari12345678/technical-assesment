@@ -1,4 +1,4 @@
-<article class="card" [class.card--inactive]="!policy.isActive" (click)="select.emit(policy)">
+<article class="card" [class.card--inactive]="!policy.isActive" (click)="selected.emit(policy)">
   <header class="card__header">
     <span class="card__type">{{ policy.type }}</span>
     <span

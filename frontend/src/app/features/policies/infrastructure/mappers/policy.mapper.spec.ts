@@ -1,5 +1,5 @@
 import { PolicyMapper } from './policy.mapper';
-import { PolicyResponseDto } from '../dtos/policy-response.dto';
+import { PaginatedPoliciesDto, PolicyResponseDto } from '../dtos/policy-response.dto';
 
 describe('PolicyMapper', () => {
   const dto: PolicyResponseDto = {
@@ -18,7 +18,7 @@ describe('PolicyMapper', () => {
     expect(entity.id).toBe(dto.id);
     expect(entity.policyNumber).toBe('POL-2026-0001');
     expect(entity.type).toBe('AUTO');
-    expect(entity.status.isActive).toBe(true);
+    expect(entity.status.isActive()).toBe(true);
     expect(entity.premium.format()).toContain('240,50');
     expect(entity.startDate).toEqual(new Date('2026-01-15'));
   });
@@ -28,6 +28,19 @@ describe('PolicyMapper', () => {
 
     expect(entities.length).toBe(2);
     expect(entities[1]?.isActive).toBe(false);
+  });
+
+  it('maps a paginated envelope to a domain page', () => {
+    const envelope: PaginatedPoliciesDto = {
+      data: [dto, { ...dto, id: 'another-id', status: 'PENDING' }],
+      meta: { page: 2, limit: 2, total: 6, totalPages: 3 },
+    };
+
+    const page = PolicyMapper.toPage(envelope);
+
+    expect(page.items.length).toBe(2);
+    expect(page.items[1]?.status.value).toBe('PENDING');
+    expect(page.meta).toEqual({ page: 2, limit: 2, total: 6, totalPages: 3 });
   });
 
   it('throws when the status is invalid', () => {

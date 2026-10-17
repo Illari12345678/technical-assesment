@@ -1,11 +1,12 @@
 import { Observable } from 'rxjs';
-import { PolicyEntity } from '../domain/models/policy.entity';
+import { PolicyPage } from '../domain/models/policy-page';
+import { PolicyQuery } from '../domain/models/policy-query';
 import { PolicyRepository } from '../domain/repositories/policy.repository';
 
 export class GetAllPoliciesUseCase {
   constructor(private readonly policyRepository: PolicyRepository) {}
 
-  execute(): Observable<PolicyEntity[]> {
-    return this.policyRepository.findAll();
+  execute(query: PolicyQuery = {}): Observable<PolicyPage> {
+    return this.policyRepository.findAll(query);
   }
 }

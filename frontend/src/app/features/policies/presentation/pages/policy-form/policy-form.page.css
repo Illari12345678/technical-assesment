@@ -1,0 +1,32 @@
+.page {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem;
+}
+
+.page__back {
+  display: inline-block;
+  margin-bottom: 1rem;
+  color: #1d4ed8;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.page__back:hover {
+  text-decoration: underline;
+}
+
+.page h1 {
+  margin: 0 0 1.5rem;
+  font-size: 1.6rem;
+  color: #0f172a;
+}
+
+.page__feedback {
+  color: #64748b;
+}
+
+.page__feedback--error {
+  color: #b91c1c;
+  margin-bottom: 1rem;
+}

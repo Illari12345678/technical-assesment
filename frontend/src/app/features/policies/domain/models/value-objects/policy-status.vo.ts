@@ -2,7 +2,7 @@ export const POLICY_STATUSES = ['ACTIVE', 'PENDING', 'CANCELLED', 'EXPIRED'] as 
 
 export type PolicyStatusValue = (typeof POLICY_STATUSES)[number];
 
-const STATUS_LABELS: Record<PolicyStatusValue, string> = {
+export const POLICY_STATUS_LABELS: Record<PolicyStatusValue, string> = {
   ACTIVE: 'Activa',
   PENDING: 'Pendiente',
   CANCELLED: 'Cancelada',
@@ -30,6 +30,6 @@ export class PolicyStatusVO {
   }
 
   get label(): string {
-    return STATUS_LABELS[this.value];
+    return POLICY_STATUS_LABELS[this.value];
   }
 }
