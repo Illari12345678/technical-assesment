@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Policies API — Express + TypeScript + Clean Architecture + DDD",
   "private": true,
+  "packageManager": "pnpm@12.14.0",
   "main": "dist/main.js",
   "scripts": {
     "dev": "tsx watch src/main.ts",
